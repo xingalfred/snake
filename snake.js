@@ -8,6 +8,11 @@ const SNAKE_BORDER = "green";
 const FOOD_COLOUR = "red";
 const FOOD_BORDER = "darkred";
 
+const LEFT_KEY = 37;
+const UP_KEY = 38;
+const RIGHT_KEY = 39;
+const DOWN_KEY = 40;
+
 var canvas = document.getElementById("gameCanvas");
 var ctx = canvas.getContext("2d");
 var w = canvas.width;
@@ -18,6 +23,7 @@ var cl = 10; // cell length
 var dx = 10;
 var dy = 0;
 
+var direction;
 var score;
 var speed;
 
@@ -38,6 +44,7 @@ function main() {
 }
 
 function init() {
+  direction = "r";
   score = 0;
   speed = 100;
 
@@ -57,9 +64,20 @@ function initSnake() {
 }
 
 function advanceSnake() {
-  const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+  var nx = snake[0].x;
+  var ny = snake[0].y;
 
-  snake.unshift(head);
+  if (direction == "l") {
+    nx -= cl;
+  } else if (direction == "u") {
+    ny -= cl;
+  } else if (direction == "r") {
+    nx += cl;
+  } else if (direction == "d") {
+    ny += cl;
+  }
+
+  snake.unshift({ x: nx, y: ny });
 
   const didEatFood = snake[0].x === foodX && snake[0].y === foodY;
   if (didEatFood) {
@@ -105,33 +123,21 @@ function changeDirection(event) {
   if (changingDirection) return;
   changingDirection = true;
 
-  const LEFT_KEY = 37;
-  const RIGHT_KEY = 39;
-  const UP_KEY = 38;
-  const DOWN_KEY = 40;
-
   const keyPressed = event.keyCode;
 
-  const goingUp = dy === -10;
-  const goingDown = dy === 10;
-  const goingRight = dx === 10;
-  const goingLeft = dx === -10;
-
-  if (keyPressed === LEFT_KEY && !goingRight) {
-    dx = -10;
-    dy = 0;
-  }
-  if (keyPressed === UP_KEY && !goingDown) {
-    dx = 0;
-    dy = -10;
-  }
-  if (keyPressed === RIGHT_KEY && !goingLeft) {
-    dx = 10;
-    dy = 0;
-  }
-  if (keyPressed === DOWN_KEY && !goingUp) {
-    dx = 0;
-    dy = 10;
+  switch (keyPressed) {
+    case LEFT_KEY:
+      if (direction != "r") direction = "l";
+      break;
+    case UP_KEY:
+      if (direction != "d") direction = "u";
+      break;
+    case RIGHT_KEY:
+      if (direction != "l") direction = "r";
+      break;
+    case DOWN_KEY:
+      if (direction != "u") direction = "d";
+      break;
   }
 }
 
