@@ -18,27 +18,34 @@ var cl = 10; // cell length
 var dx = 10;
 var dy = 0;
 
-var score = 0;
-var snakeLength = 5;
+var score;
+var speed;
+
+var snakeLength = 3;
 var snake;
 
-initSnake();
-
-createFood();
-main();
+init();
 document.addEventListener("keydown", changeDirection);
 
 function main() {
   if (didGameEnd()) return;
-  setTimeout(function onTick() {
-    changingDirection = false;
+  changingDirection = false;
+  clearCanvas();
+  drawFood();
 
-    clearCanvas();
-    drawFood();
-    drawSnake();
+  advanceSnake();
+  drawSnake();
+}
 
-    main();
-  }, 50);
+function init() {
+  score = 0;
+  speed = 100;
+
+  initSnake();
+  createFood();
+
+  if (typeof loop != "undefined") clearInterval(loop);
+  loop = setInterval(main, speed);
 }
 
 function initSnake() {
