@@ -34,7 +34,7 @@ init();
 document.addEventListener("keydown", changeDirection);
 
 function main() {
-  if (didGameEnd()) return;
+  if (didGameEnd()) init();
   changingDirection = false;
   clearCanvas();
   drawFood();
@@ -46,6 +46,7 @@ function main() {
 function init() {
   direction = "r";
   score = 0;
+  document.getElementById("score").innerHTML = score;
   speed = 100;
 
   initSnake();
